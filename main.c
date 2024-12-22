@@ -6,25 +6,23 @@
 #define MAX_TOKENS 100
 #define MAX_LENGTH 32
 
-// Liste des mots-cl�s connus
+
 const char *keywords[] = {"if", "else", "while", "int", "float", "return"};
 const int numKeywords = sizeof(keywords) / sizeof(keywords[0]);
 
-// Liste des symboles connus
+
 const char *symbols[] = {"+", "-", "*", "/", "(", ")", "{", "}", "=", ";", ",", "==", "<=", ">=", "!="};
 const int numSymbols = sizeof(symbols) / sizeof(symbols[0]);
 
-// D�finition d'un jeton
 typedef struct {
     char type[MAX_LENGTH];
     char value[MAX_LENGTH];
     int position;
 } Token;
 
-// �tats possibles
 enum State { START, IDENTIFIER, NUMBER, SYMBOL, ERROR, FINAL };
 
-// Fonction pour v�rifier si un mot est un mot-cl�
+
 int isKeyword(const char *word) {
     for (int i = 0; i < numKeywords; i++) {
         if (strcmp(word, keywords[i]) == 0) {
@@ -34,7 +32,7 @@ int isKeyword(const char *word) {
     return 0;
 }
 
-// Fonction pour v�rifier si un caract�re ou une cha�ne est un symbole
+
 int isSymbol(const char *str) {
     for (int i = 0; i < numSymbols; i++) {
         if (strcmp(str, symbols[i]) == 0) {
@@ -44,7 +42,7 @@ int isSymbol(const char *str) {
     return 0;
 }
 
-// Fonction pour ajouter un jeton
+
 void addToken(Token *tokens, int *tokenCount, const char *type, const char *value, int position) {
     strcpy(tokens[*tokenCount].type, type);
     strcpy(tokens[*tokenCount].value, value);
@@ -52,7 +50,7 @@ void addToken(Token *tokens, int *tokenCount, const char *type, const char *valu
     (*tokenCount)++;
 }
 
-// Fonction pour afficher les jetons trouv�s
+
 void printTokens(Token *tokens, int tokenCount) {
     for (int i = 0; i < tokenCount; i++) {
         printf("Token: %-10s | Type: %-15s | Position: %d\n",
