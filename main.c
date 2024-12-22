@@ -6,7 +6,7 @@
 #define MAX_TOKENS 100
 #define MAX_LENGTH 32
 
-// Liste des mots-clés connus
+// Liste des mots-clï¿½s connus
 const char *keywords[] = {"if", "else", "while", "int", "float", "return"};
 const int numKeywords = sizeof(keywords) / sizeof(keywords[0]);
 
@@ -14,17 +14,17 @@ const int numKeywords = sizeof(keywords) / sizeof(keywords[0]);
 const char *symbols[] = {"+", "-", "*", "/", "(", ")", "{", "}", "=", ";", ",", "==", "<=", ">=", "!="};
 const int numSymbols = sizeof(symbols) / sizeof(symbols[0]);
 
-// Définition d'un jeton
+// Dï¿½finition d'un jeton
 typedef struct {
     char type[MAX_LENGTH];
     char value[MAX_LENGTH];
     int position;
 } Token;
 
-// États possibles
+// ï¿½tats possibles
 enum State { START, IDENTIFIER, NUMBER, SYMBOL, ERROR, FINAL };
 
-// Fonction pour vérifier si un mot est un mot-clé
+// Fonction pour vï¿½rifier si un mot est un mot-clï¿½
 int isKeyword(const char *word) {
     for (int i = 0; i < numKeywords; i++) {
         if (strcmp(word, keywords[i]) == 0) {
@@ -34,7 +34,7 @@ int isKeyword(const char *word) {
     return 0;
 }
 
-// Fonction pour vérifier si un caractère ou une chaîne est un symbole
+// Fonction pour vï¿½rifier si un caractï¿½re ou une chaï¿½ne est un symbole
 int isSymbol(const char *str) {
     for (int i = 0; i < numSymbols; i++) {
         if (strcmp(str, symbols[i]) == 0) {
@@ -52,7 +52,7 @@ void addToken(Token *tokens, int *tokenCount, const char *type, const char *valu
     (*tokenCount)++;
 }
 
-// Fonction pour afficher les jetons trouvés
+// Fonction pour afficher les jetons trouvï¿½s
 void printTokens(Token *tokens, int tokenCount) {
     for (int i = 0; i < tokenCount; i++) {
         printf("Token: %-10s | Type: %-15s | Position: %d\n",
@@ -60,9 +60,9 @@ void printTokens(Token *tokens, int tokenCount) {
     }
 }
 
-// Fonction pour gérer les erreurs
+// Fonction pour gï¿½rer les erreurs
 void handleError(const char *message, const char *token, int position) {
-    printf("Erreur: '%s' %s à la position %d\n", token, message, position);
+    printf("Erreur: '%s' %s ï¿½ la position %d\n", token, message, position);
 }
 
 // Fonction principale d'analyse lexicale utilisant une table de transition
@@ -120,7 +120,7 @@ void lex(const char *input, Token *tokens, int *tokenCount) {
                             while(isdigit(input[i])|| input[i]=='.'){
                         buffer[bufferIndex++] = input[i++];}
                         buffer[bufferIndex] = '\0';
-                        handleError("Littéral numérique invalide", buffer, i - bufferIndex);
+                        handleError("Littï¿½ral numï¿½rique invalide", buffer, i - bufferIndex);
                         bufferIndex = 0;
                         state = START;
 
@@ -166,7 +166,7 @@ void lex(const char *input, Token *tokens, int *tokenCount) {
                 break;
 
             case ERROR:
-                handleError("Caractère non reconnu", (char[]){currentChar, '\0'}, i);
+                handleError("Caractï¿½re non reconnu", (char[]){currentChar, '\0'}, i);
                 i++;
                 state = START;
                 break;
@@ -184,7 +184,7 @@ void lex(const char *input, Token *tokens, int *tokenCount) {
         } else if (state == NUMBER) {
             if (strchr(buffer, '.')) {
 
-                handleError("Littéral numérique invalide", buffer, i - bufferIndex);
+                handleError("Littï¿½ral numï¿½rique invalide", buffer, i - bufferIndex);
             } else {
                 addToken(tokens, tokenCount, "Number", buffer, i - bufferIndex);
             }
@@ -192,26 +192,26 @@ void lex(const char *input, Token *tokens, int *tokenCount) {
             handleError("Token incomplet", buffer, i - bufferIndex);
         }
     }
-    // Vérifier une fin de fichier inattendue après un opérateur d'affectation
+       // VÃ©rification des erreurs d'assignation
     for (int j = *tokenCount - 1; j >= 0; j--) {
-        // Vérifier si l'opérateur est '='
         if (strcmp(tokens[j].type, "Symbol") == 0 && strcmp(tokens[j].value, "=") == 0) {
-            // Vérifier si le jeton précédent est un identifiant (l'élément concerné par l'affectation)
             if (j > 0 && strcmp(tokens[j - 1].type, "Identifier") == 0) {
-                // Récupérer l'identifiant et sa position
                 const char *identifier = tokens[j - 1].value;
                 int position = tokens[j - 1].position;
 
-                // Vérification si le jeton suivant est une valeur (Identifiant, Nombre, ou Mot-clé)
                 if (j == *tokenCount - 1 ||
                     (strcmp(tokens[j + 1].type, "Identifier") != 0 &&
                      strcmp(tokens[j + 1].type, "Number") != 0 &&
                      strcmp(tokens[j + 1].type, "Keyword") != 0)) {
-                    // Si aucun jeton de valeur n'est trouvé après '='
-                    handleError("Fin de fichier inattendue, attente d'une valeur pour", identifier, position);
+                    handleError("Valeur manquante pour l'assignation", identifier, position);
                 }
             }
-            break;
+        }
+        if (strcmp(tokens[j].type, "Symbol") == 0 && strcmp(tokens[j].value, "}") == 0) {
+            if (j > 0 && strcmp(tokens[j - 1].type, "Symbol") == 0 &&
+                strcmp(tokens[j - 1].value, "=") == 0) {
+                handleError("Accolade fermante inattendue aprÃ¨s une assignation", "}", tokens[j].position);
+            }
         }
     }
 
@@ -220,7 +220,7 @@ void lex(const char *input, Token *tokens, int *tokenCount) {
 
 // Fonction principale
 int main() {
-    const char *input = "int main() { int a =2_pp22pi; float b =3.14.5; int x = 10.5; int r = @10.5; int c= }";
+    const char *input = "int main() { int a =2_pp22pi; float b = ; int x = z; int r = @10.5; int c= }";
     Token tokens[MAX_TOKENS];
     int tokenCount = 0;
 
