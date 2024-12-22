@@ -60,7 +60,7 @@ void printTokens(Token *tokens, int tokenCount) {
     }
 }
 
-// Fonction pour g�rer les erreurs
+// Fonction pour gerer les erreurs
 void handleError(const char *message, const char *token, int position) {
     printf("Erreur: '%s' %s � la position %d\n", token, message, position);
 }
@@ -79,7 +79,7 @@ void lex(const char *input, Token *tokens, int *tokenCount) {
         switch (state) {
             case START:
                 if (isspace(currentChar)) {
-                    // Ignorer les espaces
+                   
                     i++;
                 } else if (isalpha(currentChar) || currentChar == '_') {
                     state = IDENTIFIER;
@@ -184,7 +184,7 @@ void lex(const char *input, Token *tokens, int *tokenCount) {
         } else if (state == NUMBER) {
             if (strchr(buffer, '.')) {
 
-                handleError("Litt�ral num�rique invalide", buffer, i - bufferIndex);
+                handleError("Littiral numerique invalide", buffer, i - bufferIndex);
             } else {
                 addToken(tokens, tokenCount, "Number", buffer, i - bufferIndex);
             }
