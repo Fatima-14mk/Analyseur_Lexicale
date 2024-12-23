@@ -60,7 +60,7 @@ void printTokens(Token *tokens, int tokenCount) {
 
 // Fonction pour gerer les erreurs
 void handleError(const char *message, const char *token, int position) {
-    printf("Erreur: '%s' %s � la position %d\n", token, message, position);
+    printf("Erreur: '%s' %s  la position %d\n", token, message, position);
 }
 
 // Fonction principale d'analyse lexicale utilisant une table de transition
@@ -118,7 +118,7 @@ void lex(const char *input, Token *tokens, int *tokenCount) {
                             while(isdigit(input[i])|| input[i]=='.'){
                         buffer[bufferIndex++] = input[i++];}
                         buffer[bufferIndex] = '\0';
-                        handleError("Litt�ral num�rique invalide", buffer, i - bufferIndex);
+                        handleError("Littral numrique invalide", buffer, i - bufferIndex);
                         bufferIndex = 0;
                         state = START;
 
@@ -164,7 +164,7 @@ void lex(const char *input, Token *tokens, int *tokenCount) {
                 break;
 
             case ERROR:
-                handleError("Caract�re non reconnu", (char[]){currentChar, '\0'}, i);
+                handleError("Caractere non reconnu", (char[]){currentChar, '\0'}, i);
                 i++;
                 state = START;
                 break;
@@ -218,7 +218,7 @@ void lex(const char *input, Token *tokens, int *tokenCount) {
 
 // Fonction principale
 int main() {
-    const char *input = "int main() { int a =2_pp22pi; float b = ; int x = z; int r = @10.5; int c= }";
+    const char *input = "int main() { int a =2_pp22pi; float b =13.2.3 ; int x = z; int r = @10.5; int c= }";
     Token tokens[MAX_TOKENS];
     int tokenCount = 0;
 
